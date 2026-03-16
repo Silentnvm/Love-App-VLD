@@ -1,0 +1,26 @@
+{% extends 'game/base.html' %}
+
+{% block content %}
+<div class="container fade-in">
+    <div class="card" style="max-width: 400px; margin: 2rem auto; padding: 20px;">
+        <h2 style="text-align: center;">Creează Cont Nou</h2>
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group" style="margin-bottom: 15px;">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" required style="width: 100%; padding: 8px;">
+            </div>
+            <div class="form-group" style="margin-bottom: 15px;">
+                <label for="password">Parolă</label>
+                <input type="password" id="password" name="password" required style="width: 100%; padding: 8px;">
+            </div>
+            <div class="form-group" style="margin-bottom: 15px;">
+                <label for="confirm_password">Confirmă Parola</label>
+                <input type="password" id="confirm_password" name="confirm_password" required style="width: 100%; padding: 8px;">
+            </div>
+            <button type="submit" class="btn" style="width: 100%; background-color: var(--primary-color); color: white; padding: 10px; border: none; cursor: pointer;">Înregistrează-te</button>
+        </form>
+        <p style="text-align: center; margin-top: 1rem;">Ai deja cont? <a href="{% url 'login' %}">Loghează-te</a></p>
+    </div>
+</div>
+{% endblock %}

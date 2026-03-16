@@ -1,0 +1,79 @@
+{% extends 'game/base.html' %}
+
+{% block extra_css %}
+<style>
+    .reward-card-claimed {
+        border-left: 5px solid #ccc !important;
+        background-color: #f9f9f9 !important;
+    }
+    .reward-card-unclaimed {
+        border-left: 5px solid var(--primary-color) !important;
+        background-color: #fff !important;
+    }
+    .reward-title-claimed {
+        color: #666 !important;
+    }
+    .reward-title-unclaimed {
+        color: var(--text-color) !important;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container fade-in">
+    <div class="header-section">
+        <h1>🎒 My Collection</h1>
+        <p class="subtitle">History of all your earned rewards</p>
+    </div>
+
+    <div class="rewards-list" style="max-width: 800px; margin: 0 auto;">
+        {% for item in rewards_history %}
+        <div class="card reward-card {% if item.is_claimed %}reward-card-claimed{% else %}reward-card-unclaimed{% endif %}" style="display: flex; gap: 20px; margin-bottom: 20px; padding: 20px; align-items: center;">
+            
+            <!-- Icon based on type -->
+            <div class="reward-icon" style="font-size: 2.5em; min-width: 60px; text-align: center;">
+                {% if item.reward.reward_type == 'MESSAGE' %}💌
+                {% elif item.reward.reward_type == 'VOUCHER' %}🎟️
+                {% elif item.reward.reward_type == 'COLLECTIBLE' %}💎
+                {% elif item.reward.reward_type == 'BOOST' %}🚀
+                {% elif item.reward.reward_type == 'EXTRA_SPIN' %}🎡
+                {% elif item.reward.reward_type == 'EXTRA_QUESTION' %}❓
+                {% elif item.reward.reward_type == 'EXTRA_MEMORY' %}📸
+                {% else %}🎁{% endif %}
+            </div>
+            
+            <div class="reward-info" style="flex-grow: 1;">
+                <h3 class="{% if item.is_claimed %}reward-title-claimed{% else %}reward-title-unclaimed{% endif %}" style="margin: 0 0 5px 0;">{{ item.reward.title }}</h3>
+                <p style="color: #666; margin-bottom: 5px; font-size: 0.95em;">{{ item.reward.description }}</p>
+                <small style="color: #999;">Earned on: {{ item.earned_at|date:"d M Y" }}</small>
+                
+                {% if item.is_claimed and item.reward.content %}
+                <div class="reward-content" style="margin-top: 10px; padding: 10px; background: #fff; border: 1px dashed #ccc; border-radius: 5px;">
+                    <strong style="color: var(--primary-color);">Content:</strong> {{ item.reward.content }}
+                </div>
+                {% endif %}
+            </div>
+            
+            <div class="reward-action" style="min-width: 120px; text-align: right;">
+                {% if item.is_claimed %}
+                    <button class="btn btn-secondary" disabled style="opacity: 0.7; cursor: default; background-color: #ccc; border-color: #ccc;">
+                        Claimed ✓
+                    </button>
+                {% else %}
+                    <form action="{% url 'claim_listing_reward' item.id %}" method="POST">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-primary" style="white-space: nowrap;">
+                            Claim 🎁
+                        </button>
+                    </form>
+                {% endif %}
+            </div>
+        </div>
+        {% empty %}
+        <div class="empty-state" style="text-align: center; padding: 40px;">
+            <p>Nu ai câștigat nicio recompensă încă. Joacă minigame-uri sau învârte roata! 🎲</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,90 @@
+{% extends 'game/base.html' %}
+
+{% block title %}Dashboard - Love App{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <div class="welcome-section">
+        <h1>Welcome back, {{ user.first_name|default:user.username }}! 💖</h1>
+        <p>Current Level: <strong>{{ profile.current_level }}</strong></p>
+        <p>Total Score: <strong>{{ profile.total_score }}</strong> points</p>
+        <p>Streak: <strong>🔥 {{ profile.streak_days }}</strong> days</p>
+    </div>
+    
+    <div class="quick-actions">
+        <a href="{% url 'daily_message' %}" class="action-card {% if daily_claimed %}claimed{% endif %}">
+            <div class="action-icon">📬</div>
+            <div class="action-title">Daily Message</div>
+            <div class="action-subtitle">
+                {% if daily_claimed %}
+                    ✓ Claimed today
+                {% else %}
+                    New message available!
+                {% endif %}
+            </div>
+        </a>
+        
+        <a href="{% url 'memories' %}" class="action-card">
+            <div class="action-icon">📸</div>
+            <div class="action-title">Memories</div>
+            <div class="action-subtitle">View special moments</div>
+        </a>
+        
+        <a href="{% url 'spin_wheel' %}" class="action-card">
+            <div class="action-icon">🎡</div>
+            <div class="action-title">Spin Wheel</div>
+            <div class="action-subtitle">Try your luck!</div>
+        </a>
+        
+        <a href="{% url 'questions' %}" class="action-card">
+            <div class="action-icon">❓</div>
+            <div class="action-title">Questions</div>
+            <div class="action-subtitle">Deep conversations</div>
+        </a>
+    </div>
+    
+    <div class="levels-section">
+        <h2>Your Progress</h2>
+        <div class="levels-map">
+            {% for level in all_levels %}
+            <div class="level-card {% if level.number > profile.current_level %}locked{% endif %} {% if level.number == profile.current_level %}current{% endif %}">
+                <div class="level-number">{{ level.number }}</div>
+                <div class="level-title">{{ level.title }}</div>
+                <div class="level-description">{{ level.description|truncatewords:15 }}</div>
+                
+                {% if level.number <= profile.current_level %}
+                <a href="{% url 'level_detail' level.number %}" class="btn btn-small">Enter Level</a>
+                {% else %}
+                <div class="lock-icon">🔒</div>
+                <div class="unlock-requirement">
+                    {% if level.requires_admin_approval %}
+                        Requires admin approval
+                    {% else %}
+                        Score needed: {{ level.required_score }}
+                    {% endif %}
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    
+    <div class="stats-section">
+        <h2>Your Stats</h2>
+        <div class="stats-grid">
+            <div class="stat-box">
+                <div class="stat-number">{{ completed_minigames }}</div>
+                <div class="stat-label">Minigames Completed</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number">{{ profile.total_score }}</div>
+                <div class="stat-label">Total Points</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number">{{ profile.streak_days }}</div>
+                <div class="stat-label">Day Streak</div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

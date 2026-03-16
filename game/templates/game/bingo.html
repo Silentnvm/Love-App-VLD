@@ -1,0 +1,60 @@
+{% extends 'game/base.html' %}
+{% load game_filters %}
+
+{% block title %}Bingo - Love App{% endblock %}
+
+{% block content %}
+<div class="bingo-container">
+    <h1 class="page-title">🎯 Bingo Challenges</h1>
+    
+    {% if active_cards %}
+    <div class="bingo-cards">
+        {% for card in active_cards %}
+        <div class="bingo-card-preview">
+            <h3>{{ card.title }}</h3>
+            <p>{{ card.description }}</p>
+            <p>Duration: {{ card.duration_days }} days</p>
+            
+            {% with progress=player_progress|get_item:card.id %}
+            {% if progress %}
+            <p>Completed: {{ progress.completed_squares|length }} / {{ card.size }}</p>
+            {% if progress.is_completed %}
+            <div class="completed-badge">✓ Completed!</div>
+            {% else %}
+            <a href="{% url 'bingo_card_detail' card.id %}" class="btn btn-small">Continue</a>
+            {% endif %}
+            {% else %}
+            <a href="{% url 'bingo_card_detail' card.id %}" class="btn btn-primary">Start</a>
+            {% endif %}
+            {% endwith %}
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="no-bingo">
+        <p>No active bingo cards!</p>
+    </div>
+    {% endif %}
+</div>
+
+<style>
+.bingo-container {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.bingo-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.bingo-card-preview {
+    background: var(--card-bg);
+    padding: 2rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    text-align: center;
+}
+</style>
+{% endblock %}

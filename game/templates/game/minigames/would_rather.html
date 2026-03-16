@@ -1,0 +1,35 @@
+{% extends 'game/base.html' %}
+
+{% block title %}{{ minigame.title }} - Would You Rather{% endblock %}
+
+{% block content %}
+<div class="minigame-container">
+    <h1 class="page-title">Would You Rather</h1>
+    <p class="minigame-description">{{ minigame.description }}</p>
+
+    <form method="post" action="{% url 'submit_minigame' minigame.id %}" class="wyr-form">
+        {% csrf_token %}
+        {% for question in questions %}
+        <div class="wyr-card">
+            <div class="question-text">{{ question.question_text }}</div>
+            <div class="options two-col">
+                {% for option in question.options.all %}
+                <label class="option-label">
+                    <input type="radio" name="question_{{ question.id }}" value="{{ option.id }}" required>
+                    <span class="option-text">{{ option.option_text }}</span>
+                </label>
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+        <button type="submit" class="btn btn-primary">Choose</button>
+    </form>
+</div>
+
+<style>
+.wyr-card { background: var(--card-bg); padding: 1.5rem; border-radius: var(--border-radius); box-shadow: var(--box-shadow); margin-bottom: 1rem; }
+.options.two-col { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+.option-label { background: #fff; border: 2px solid #e0e0e0; border-radius: 10px; padding: 1rem; cursor: pointer; }
+.option-label:hover { border-color: var(--primary-color); }
+</style>
+{% endblock %}

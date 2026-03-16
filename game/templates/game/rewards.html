@@ -1,0 +1,147 @@
+{% extends 'game/base.html' %}
+
+{% block title %}Rewards - Love App{% endblock %}
+
+{% block content %}
+<div class="rewards-container">
+    <h1 class="page-title">🎁 Your Rewards</h1>
+    
+    {% if earned_rewards %}
+    <div class="rewards-grid">
+        {% for player_reward in earned_rewards %}
+        <div class="reward-card {% if player_reward.is_claimed %}claimed{% endif %}">
+            {% if player_reward.reward.image %}
+            <div class="reward-image">
+                <img src="{{ player_reward.reward.image.url }}" alt="{{ player_reward.reward.title }}">
+            </div>
+            {% endif %}
+            
+            <div class="reward-icon">🎁</div>
+            <h3>{{ player_reward.reward.title }}</h3>
+            <p class="reward-type">{{ player_reward.reward.get_reward_type_display }}</p>
+            <p class="reward-description">{{ player_reward.reward.description }}</p>
+            
+            {% if player_reward.reward.content %}
+            <div class="reward-content">{{ player_reward.reward.content }}</div>
+            {% endif %}
+            
+            <div class="reward-footer">
+                <span class="earned-date">Earned: {{ player_reward.earned_at|date:"M d, Y" }}</span>
+                {% if player_reward.is_claimed %}
+                <span class="claimed-badge">✓ Claimed</span>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="no-rewards">
+        <p>No rewards yet. Keep playing to earn rewards! 💪</p>
+    </div>
+    {% endif %}
+</div>
+
+<style>
+.rewards-container {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.page-title {
+    text-align: center;
+    color: var(--primary-color);
+    margin-bottom: 2rem;
+}
+
+.rewards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.reward-card {
+    background: var(--card-bg);
+    padding: 2rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    text-align: center;
+    transition: var(--transition);
+}
+
+.reward-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+.reward-card.claimed {
+    border: 2px solid var(--success);
+}
+
+.reward-image {
+    margin-bottom: 1rem;
+}
+
+.reward-image img {
+    max-width: 100%;
+    border-radius: 8px;
+}
+
+.reward-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.reward-card h3 {
+    color: var(--text-dark);
+    margin-bottom: 0.5rem;
+}
+
+.reward-type {
+    color: var(--primary-color);
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+.reward-description {
+    color: var(--text-light);
+    margin-bottom: 1rem;
+}
+
+.reward-content {
+    background: #f8f9fa;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    font-style: italic;
+}
+
+.reward-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 1rem;
+    border-top: 1px solid #e0e0e0;
+}
+
+.earned-date {
+    color: var(--text-light);
+    font-size: 0.9rem;
+}
+
+.claimed-badge {
+    background: var(--success);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 15px;
+    font-size: 0.9rem;
+}
+
+.no-rewards {
+    background: var(--card-bg);
+    padding: 3rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    text-align: center;
+}
+</style>
+{% endblock %}

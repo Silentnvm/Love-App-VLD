@@ -1,0 +1,79 @@
+{% extends 'game/base.html' %}
+
+{% block content %}
+<div class="container fade-in">
+    <div class="header-section">
+        <h1>📸 Our Memories</h1>
+        <p class="subtitle">Moments we cherish forever</p>
+    </div>
+
+    <!-- Bonus Memory Section (Sneak Peek) -->
+    {% if bonus_memory %}
+    <div class="memory-section bonus-section" style="background: linear-gradient(135deg, #fff0f6 0%, #ffe3e3 100%); border: 2px dashed var(--primary-color); border-radius: 15px; padding: 20px; margin-bottom: 40px;">
+        <h2 style="color: var(--primary-color); text-align: center;">✨ Bonus Sneak Peek ✨</h2>
+        <p style="text-align: center; margin-bottom: 20px;">You won an extra memory view! Here is a glimpse into the future...</p>
+        
+        <div class="memory-card" style="max-width: 600px; margin: 0 auto; background: white; padding: 15px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+            <div class="memory-date" style="color: #888; font-size: 0.9em; margin-bottom: 10px;">
+                📅 {{ bonus_memory.date|date:"d F Y" }} (Upcoming)
+            </div>
+            {% if bonus_memory.image %}
+            <div class="memory-image" style="margin-bottom: 15px;">
+                <img src="{{ bonus_memory.image.url }}" alt="{{ bonus_memory.title }}" style="width: 100%; max-height: 400px; object-fit: contain; border-radius: 8px;">
+            </div>
+            {% endif %}
+            <h3 class="memory-title">{{ bonus_memory.title }}</h3>
+            <p class="memory-desc">{{ bonus_memory.description }}</p>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Today's Memories -->
+    {% if today_memories %}
+    <div class="memory-section">
+        <h2 style="text-align: center; margin-bottom: 30px;">Today's Special Moments 💖</h2>
+        <div class="memories-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+            {% for memory in today_memories %}
+            <div class="card memory-card">
+                {% if memory.image %}
+                <img src="{{ memory.image.url }}" alt="{{ memory.title }}" style="width: 100%; height: 250px; object-fit: contain; background-color: #f8f9fa; border-radius: 10px 10px 0 0;">
+                {% endif %}
+                <div class="card-content" style="padding: 20px;">
+                    <h3>{{ memory.title }}</h3>
+                    <p style="color: #666; font-size: 0.9em;">{{ memory.date|date:"d F Y" }}</p>
+                    <p style="margin-top: 10px;">{{ memory.description }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% else %}
+        {% if not bonus_memory %}
+        <div class="empty-state" style="text-align: center; margin: 40px 0;">
+            <p>No specific memories for today's date.</p>
+            <p>Check back tomorrow or spin the wheel for a sneak peek! 🎡</p>
+        </div>
+        {% endif %}
+    {% endif %}
+
+    <!-- Past Memories -->
+    {% if recent_memories %}
+    <div class="memory-section" style="margin-top: 50px;">
+        <h2 style="text-align: center; margin-bottom: 30px; color: #888;">Memory Lane 🕰️</h2>
+        <div class="memories-list" style="max-width: 800px; margin: 0 auto;">
+            {% for memory in recent_memories %}
+            <div class="card" style="display: flex; gap: 20px; padding: 15px; margin-bottom: 15px; align-items: center;">
+                {% if memory.image %}
+                <img src="{{ memory.image.url }}" alt="{{ memory.title }}" style="width: 100px; height: 100px; object-fit: contain; background-color: #f8f9fa; border: 1px solid #eee; border-radius: 8px;">
+                {% endif %}
+                <div>
+                    <h4 style="margin: 0 0 5px 0;">{{ memory.title }}</h4>
+                    <p style="margin: 0; color: #666; font-size: 0.9em;">{{ memory.date|date:"d F Y" }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

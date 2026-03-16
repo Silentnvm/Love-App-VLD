@@ -1,0 +1,12 @@
+{% extends 'game/base.html' %}
+
+{% block title %}{{ minigame.title }} - Guess the Place{% endblock %}
+
+{% block content %}
+<div class="minigame-container">
+    <h1 class="page-title">Guess the Place (Coming Soon)</h1>
+    <p class="minigame-description">{{ minigame.description }}</p>
+    <div class="placeholder">Blurred/cropped image guessing UI will be here.</div>
+    <a class="btn btn-small" href="{% url 'minigame_detail' minigame.id %}">Back</a>
+</div>
+{% endblock %}

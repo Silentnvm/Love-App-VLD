@@ -1,0 +1,17 @@
+{% extends 'game/base.html' %}
+
+{% block title %}Minigame - Love App{% endblock %}
+
+{% block content %}
+<div class="minigame-container">
+    <h1>{{ minigame.title }}</h1>
+    <p>{{ minigame.description }}</p>
+    
+    <div class="minigame-info">
+        <p>Type: {{ minigame.game_type.display_name }}</p>
+        <p>Reward: {{ minigame.points_reward }} points</p>
+    </div>
+    
+    <a href="{% url 'play_minigame' minigame.id %}" class="btn btn-primary">Start Game</a>
+</div>
+{% endblock %}

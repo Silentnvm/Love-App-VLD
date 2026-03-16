@@ -1,0 +1,186 @@
+{% extends 'game/base.html' %}
+{% load game_filters %}
+
+{% block title %}Level {{ level.number }} - Love App{% endblock %}
+
+{% block content %}
+<div class="level-container">
+    <div class="level-header">
+        <div class="level-badge">Level {{ level.number }}</div>
+        <h1>{{ level.title }}</h1>
+        <p class="level-description">{{ level.description }}</p>
+    </div>
+    
+    <div class="minigames-section">
+        <h2>Minigames</h2>
+        <div class="minigames-grid">
+            {% for minigame in minigames %}
+            <div class="minigame-card {% if minigame.is_locked %}locked{% endif %}">
+                <div class="minigame-icon">{{ minigame.game_type.icon|default:"🎮" }}</div>
+                <h3>{{ minigame.title }}</h3>
+                <p class="minigame-type">{{ minigame.game_type.display_name }}</p>
+                <p class="minigame-desc">{{ minigame.description|truncatewords:20 }}</p>
+                
+                {% with progress=progress_data|get_item:minigame.id %}
+                {% if progress %}
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: {{ progress.percentage }}%"></div>
+                </div>
+                <div class="progress-text">{{ progress.percentage|floatformat:0 }}%</div>
+                {% endif %}
+                {% endwith %}
+                
+                <div class="minigame-footer">
+                    <span class="reward-badge">+{{ minigame.points_reward }} points</span>
+                    {% if not minigame.is_locked %}
+                    <a href="{% url 'play_minigame' minigame.id %}" class="btn btn-small">Play</a>
+                    {% else %}
+                    <span class="locked-badge">🔒 Locked</span>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    
+    <div class="back-link">
+        <a href="{% url 'player_dashboard' %}" class="btn btn-small">← Back to Dashboard</a>
+    </div>
+</div>
+
+<style>
+.level-container {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.level-header {
+    background: var(--card-bg);
+    padding: 2rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.level-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    padding: 0.5rem 1.5rem;
+    border-radius: 20px;
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+.level-header h1 {
+    color: var(--text-dark);
+    margin-bottom: 1rem;
+}
+
+.level-description {
+    color: var(--text-light);
+    font-size: 1.1rem;
+}
+
+.minigames-section h2 {
+    margin-bottom: 1.5rem;
+    color: var(--text-dark);
+}
+
+.minigames-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.minigame-card {
+    background: var(--card-bg);
+    padding: 1.5rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    transition: var(--transition);
+}
+
+.minigame-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+.minigame-card.locked {
+    opacity: 0.6;
+    filter: grayscale(50%);
+}
+
+.minigame-icon {
+    font-size: 3rem;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.minigame-card h3 {
+    color: var(--text-dark);
+    margin-bottom: 0.5rem;
+}
+
+.minigame-type {
+    color: var(--primary-color);
+    font-size: 0.9rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.minigame-desc {
+    color: var(--text-light);
+    margin-bottom: 1rem;
+}
+
+.progress-bar {
+    background: #e0e0e0;
+    height: 8px;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 0.5rem;
+}
+
+.progress-fill {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    height: 100%;
+    transition: width 0.3s ease;
+}
+
+.progress-text {
+    text-align: center;
+    color: var(--text-light);
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+}
+
+.minigame-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.reward-badge {
+    background: var(--accent-color);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 15px;
+    font-size: 0.9rem;
+}
+
+.locked-badge {
+    color: var(--text-light);
+}
+
+.back-link {
+    text-align: center;
+}
+</style>
+
+<script>
+// Custom template filter helper (in template context)
+</script>
+{% endblock %}

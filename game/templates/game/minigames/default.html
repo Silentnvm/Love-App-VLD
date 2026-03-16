@@ -1,0 +1,26 @@
+{% extends 'game/base.html' %}
+
+{% block title %}{{ minigame.title }} - Love App{% endblock %}
+
+{% block content %}
+<div class="minigame-container">
+    <h1 class="page-title">{{ minigame.title }}</h1>
+    <p class="minigame-description">{{ minigame.description }}</p>
+
+    <div class="placeholder">
+        <p>This minigame type doesn't have a dedicated UI yet.</p>
+        <p>You can still add questions in admin and use the quiz flow.</p>
+        <a href="{% url 'play_minigame' minigame.id %}" class="btn btn-primary">Start</a>
+    </div>
+</div>
+
+<style>
+.placeholder {
+    background: var(--card-bg);
+    padding: 2rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    text-align: center;
+}
+</style>
+{% endblock %}

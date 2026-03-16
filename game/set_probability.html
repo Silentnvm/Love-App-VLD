@@ -1,0 +1,26 @@
+{% extends "admin/base_site.html" %}
+
+{% block content %}
+<div style="padding: 20px; background: #fff; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+    <h2>Set Probability for Selected Items</h2>
+    <p>You are about to update the probability for the following <strong>{{ items|length }}</strong> items:</p>
+    
+    <form action="" method="post">
+        {% csrf_token %}
+        
+        {% for item in items %}
+        <input type="hidden" name="{{ action_checkbox_name }}" value="{{ item.pk }}">
+        <div style="margin-bottom: 5px; color: #666;">• {{ item }}</div>
+        {% endfor %}
+        
+        <input type="hidden" name="action" value="set_probability_bulk">
+        <input type="hidden" name="apply" value="1">
+        
+        <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #eee;">
+            <label style="font-weight: bold;">New Probability (%): </label>
+            <input type="number" name="probability" step="0.01" required style="padding: 5px; border: 1px solid #ccc; border-radius: 4px;">
+            <input type="submit" value="Update All" class="default" style="margin-left: 10px; padding: 6px 15px; background: #417690; color: white; border: none; border-radius: 4px; cursor: pointer;">
+        </div>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,440 @@
+/* Root variables */
+:root {
+    --primary-color: #c788c7;     /* mov mediu */
+    --secondary-color: #b093b0;   /* mov muted */
+    --accent-color: #dbb5db;      /* mov deschis */
+    --bg-color: #f4eaf4;          /* background foarte deschis */
+
+    --card-bg: #ffffff;
+    --text-dark: #1f1b22;
+    --text-light: #6b6470;
+
+    --success: #2ecc71;
+    --warning: #f39c12;
+    --danger: #e74c3c;
+
+    --border-radius: 15px;
+    --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --transition: all 0.3s ease;
+}
+/* Reset and base styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, var(--bg-color) 0%, var(--accent-color) 100%);
+    color: var(--text-dark);
+    line-height: 1.6;
+    min-height: 100vh;
+}
+
+/* Navbar */
+.navbar {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    padding: 1rem 0;
+    box-shadow: var(--box-shadow);
+}
+
+.nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav-brand {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: white;
+    text-decoration: none;
+}
+
+.nav-menu {
+    display: flex;
+    list-style: none;
+    gap: 1.5rem;
+}
+
+.nav-menu a {
+    color: white;
+    text-decoration: none;
+    transition: var(--transition);
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+}
+
+.nav-menu a:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* Player stats bar */
+.player-stats {
+    background: var(--card-bg);
+    padding: 1rem;
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    box-shadow: var(--box-shadow);
+}
+
+.stat-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.stat-label {
+    color: var(--text-light);
+    font-size: 0.9rem;
+}
+
+.stat-value {
+    font-weight: bold;
+    color: var(--primary-color);
+    font-size: 1.1rem;
+}
+
+/* Main content */
+.main-content {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 20px;
+    min-height: calc(100vh - 300px);
+}
+
+/* Messages */
+.messages {
+    margin-bottom: 1rem;
+}
+
+.alert {
+    padding: 1rem;
+    border-radius: var(--border-radius);
+    margin-bottom: 1rem;
+}
+
+.alert-success {
+    background: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.alert-warning {
+    background: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeaa7;
+}
+
+.alert-error {
+    background: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+/* Login page */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+}
+
+.login-card {
+    background: var(--card-bg);
+    padding: 3rem;
+    border-radius: var(--border-radius);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    max-width: 400px;
+    width: 100%;
+}
+
+.login-title {
+    text-align: center;
+    color: var(--primary-color);
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.login-subtitle {
+    text-align: center;
+    color: var(--text-light);
+    margin-bottom: 2rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--text-dark);
+    font-weight: 500;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: var(--transition);
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+
+/* Buttons */
+.btn {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    text-decoration: none;
+    text-align: center;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    width: 100%;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(199, 136, 199, 0.4);
+}
+
+.btn-small {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+}
+
+/* Dashboard */
+.welcome-section {
+    background: var(--card-bg);
+    padding: 2rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.welcome-section h1 {
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+}
+
+.quick-actions {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.action-card {
+    background: var(--card-bg);
+    padding: 2rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    text-align: center;
+    text-decoration: none;
+    color: var(--text-dark);
+    transition: var(--transition);
+}
+
+.action-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+.action-card.claimed {
+    opacity: 0.6;
+}
+
+.action-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.action-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.action-subtitle {
+    color: var(--text-light);
+    font-size: 0.9rem;
+}
+
+/* Levels section */
+.levels-section {
+    margin-bottom: 2rem;
+}
+
+.levels-section h2 {
+    margin-bottom: 1.5rem;
+    color: var(--text-dark);
+}
+
+.levels-map {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.level-card {
+    background: var(--card-bg);
+    padding: 1.5rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    position: relative;
+    transition: var(--transition);
+}
+
+.level-card.current {
+    border: 3px solid var(--primary-color);
+    box-shadow: 0 0 20px rgba(199, 136, 199, 0.3);
+}
+
+.level-card.locked {
+    opacity: 0.6;
+    filter: grayscale(50%);
+}
+
+.level-number {
+    display: inline-block;
+    background: var(--primary-color);
+    color: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+.level-title {
+    font-size: 1.3rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    color: var(--text-dark);
+}
+
+.level-description {
+    color: var(--text-light);
+    margin-bottom: 1rem;
+}
+
+.lock-icon {
+    font-size: 2rem;
+    text-align: center;
+    margin: 1rem 0;
+}
+
+.unlock-requirement {
+    text-align: center;
+    color: var(--text-light);
+    font-size: 0.9rem;
+}
+
+/* Stats section */
+.stats-section {
+    background: var(--card-bg);
+    padding: 2rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+}
+
+.stats-section h2 {
+    margin-bottom: 1.5rem;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+}
+
+.stat-box {
+    text-align: center;
+    padding: 1.5rem;
+    background: linear-gradient(135deg, var(--bg-color), #ffe6f0);
+    border-radius: var(--border-radius);
+}
+
+.stat-number {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: var(--primary-color);
+    margin-bottom: 0.5rem;
+}
+
+.stat-label {
+    color: var(--text-light);
+    font-size: 0.9rem;
+}
+
+/* Footer */
+.footer {
+    background: var(--card-bg);
+    padding: 2rem;
+    text-align: center;
+    color: var(--text-light);
+    margin-top: 3rem;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .nav-menu {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .player-stats {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .quick-actions {
+        grid-template-columns: 1fr;
+    }
+    
+    .levels-map {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.action-card,
+.level-card,
+.stat-box {
+    animation: fadeIn 0.5s ease;
+}

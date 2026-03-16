@@ -1,0 +1,204 @@
+{% extends 'game/base.html' %}
+
+{% block title %}{{ minigame.title }} - Love App{% endblock %}
+
+{% block content %}
+<div class="minigame-container">
+    <h1 class="page-title">{{ minigame.title }}</h1>
+    <p class="minigame-description">{{ minigame.description }}</p>
+    
+    <div class="quiz-container">
+        <form method="post" action="{% url 'submit_minigame' minigame.id %}">
+            {% csrf_token %}
+            
+            {% for question in questions %}
+            <div class="question-card">
+                <div class="question-header">
+                    <span class="question-number">Question {{ forloop.counter }}</span>
+                    <span class="question-points">{{ question.points }} points</span>
+                </div>
+                
+                <div class="question-text">{{ question.question_text }}</div>
+                
+                {% if question.question_type == 'MULTIPLE' %}
+                <div class="options">
+                    {% for option in question.options.all %}
+                    <label class="option-label">
+                        <input type="radio" name="question_{{ question.id }}" value="{{ option.id }}" required>
+                        <span class="option-text">{{ option.option_text }}</span>
+                    </label>
+                    {% endfor %}
+                </div>
+                {% elif question.question_type == 'TEXT' %}
+                <input type="text" name="question_{{ question.id }}" class="text-input" placeholder="Your answer..." required>
+                {% elif question.question_type == 'TRUE_FALSE' %}
+                <div class="options">
+                    <label class="option-label">
+                        <input type="radio" name="question_{{ question.id }}" value="True" required>
+                        <span class="option-text">True</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="question_{{ question.id }}" value="False" required>
+                        <span class="option-text">False</span>
+                    </label>
+                </div>
+                {% endif %}
+                
+                {% if question.hint %}
+                <div class="hint-container">
+                    <button type="button" class="hint-btn" onclick="toggleHint({{ question.id }})">💡 Show Hint</button>
+                    <div id="hint-{{ question.id }}" class="hint-text" style="display: none;">{{ question.hint }}</div>
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+            
+            <button type="submit" class="btn btn-primary">Submit Answers</button>
+        </form>
+    </div>
+    
+    {% if progress.attempts > 0 %}
+    <div class="progress-info">
+        <h3>Your Progress</h3>
+        <p>Attempts: {{ progress.attempts }}</p>
+        <p>Best Score: {{ progress.score }} / {{ progress.percentage }}%</p>
+        {% if progress.is_completed %}
+        <p class="completed-badge">✓ Completed!</p>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+
+<style>
+.minigame-container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.page-title {
+    text-align: center;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+}
+
+.minigame-description {
+    text-align: center;
+    color: var(--text-light);
+    margin-bottom: 2rem;
+}
+
+.quiz-container {
+    background: var(--card-bg);
+    padding: 2rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+}
+
+.question-card {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 10px;
+    margin-bottom: 1.5rem;
+}
+
+.question-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+.question-number {
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+.question-points {
+    background: var(--accent-color);
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 15px;
+    font-size: 0.9rem;
+}
+
+.question-text {
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+    color: var(--text-dark);
+}
+
+.options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.option-label {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    background: white;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.option-label:hover {
+    border-color: var(--primary-color);
+}
+
+.option-label input[type="radio"] {
+    margin-right: 1rem;
+}
+
+.text-input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 1rem;
+}
+
+.hint-container {
+    margin-top: 1rem;
+}
+
+.hint-btn {
+    background: var(--warning);
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.hint-text {
+    margin-top: 0.5rem;
+    padding: 1rem;
+    background: #fff3cd;
+    border-left: 4px solid var(--warning);
+    border-radius: 4px;
+}
+
+.progress-info {
+    margin-top: 2rem;
+    background: var(--card-bg);
+    padding: 1.5rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+}
+
+.completed-badge {
+    color: var(--success);
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+</style>
+
+<script>
+function toggleHint(questionId) {
+    const hint = document.getElementById('hint-' + questionId);
+    hint.style.display = hint.style.display === 'none' ? 'block' : 'none';
+}
+</script>
+{% endblock %}

@@ -1,0 +1,52 @@
+{% extends 'game/base.html' %}
+
+{% block title %}Spin the Wheel - Love App{% endblock %}
+
+{% block content %}
+<div class="spin-container">
+    <h1 class="page-title">🎡 Spin the Wheel</h1>
+    
+    {% if already_spun %}
+    <div class="already-spun">
+        <p>You already spun today! Come back tomorrow! 🎯</p>
+    </div>
+    {% else %}
+    <form method="post" class="spin-form">
+        {% csrf_token %}
+        <div class="wheel-animation">🎡</div>
+        <button type="submit" class="btn btn-primary btn-large">SPIN NOW!</button>
+    </form>
+    {% endif %}
+</div>
+
+<style>
+.spin-container {
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.wheel-animation {
+    font-size: 10rem;
+    margin: 2rem 0;
+    animation: spin 3s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.btn-large {
+    font-size: 1.5rem;
+    padding: 1.5rem 3rem;
+}
+
+.already-spun {
+    background: var(--card-bg);
+    padding: 3rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+}
+</style>
+{% endblock %}

@@ -1,0 +1,80 @@
+{% extends 'game/base.html' %}
+
+{% block extra_css %}
+<style>
+    .status-graded { border-left: 5px solid #4CAF50 !important; }
+    .status-pending { border-left: 5px solid #FFC107 !important; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container fade-in">
+    <div class="header-section">
+        <h1>❤️ Questions for Us</h1>
+        <p class="subtitle">Let's talk about...</p>
+    </div>
+
+    <div class="card question-card" style="text-align: center; padding: 40px; margin: 20px 0;">
+        {% if question %}
+            <div class="question-content">
+                <h2 style="color: var(--primary-color); margin-bottom: 20px;">{{ question.text }}</h2>
+                
+                <form method="POST" style="margin-top: 30px;">
+                    {% csrf_token %}
+                    <input type="hidden" name="question_id" value="{{ question.id }}">
+                    <div class="form-group">
+                        <textarea name="response_text" class="form-control" rows="4" placeholder="Scrie răspunsul tău aici..." required style="width: 100%; max-width: 500px; padding: 15px; border-radius: 10px; border: 2px solid #eee;"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="margin-top: 20px;">Trimite Răspunsul 💌</button>
+                </form>
+            </div>
+        {% else %}
+            <div class="empty-state">
+                {% if limit_reached %}
+                    <p>Ai răspuns deja la întrebarea zilei! Revino mâine sau câștigă o șansă extra la roată. 🎡</p>
+                {% else %}
+                    <p>Ai răspuns la toate întrebările momentan! Revino mai târziu. 💕</p>
+                {% endif %}
+                <a href="{% url 'player_dashboard' %}" class="btn btn-secondary" style="margin-top: 20px;">Înapoi la Dashboard</a>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- History Section -->
+    <div class="history-section" style="margin-top: 50px; max-width: 800px; margin-left: auto; margin-right: auto;">
+        <h2 style="text-align: center; margin-bottom: 30px; color: var(--text-color);">Istoric Răspunsuri 📜</h2>
+        
+        {% for item in history %}
+        <div class="card {% if item.is_graded %}status-graded{% else %}status-pending{% endif %}" style="margin-bottom: 20px; padding: 20px; text-align: left;">
+            <div style="margin-bottom: 10px;">
+                <strong style="color: var(--primary-color); font-size: 1.1em;">Q: {{ item.question.text }}</strong>
+            </div>
+            <div style="margin-bottom: 15px; font-style: italic; color: #555; background: #f9f9f9; padding: 10px; border-radius: 5px;">
+                "{{ item.response_text }}"
+            </div>
+            {% if item.admin_feedback %}
+            <div style="margin-bottom: 15px; padding: 10px; background-color: #e8f5e9; border-radius: 5px; border-left: 4px solid #4CAF50;">
+                <strong style="color: #2e7d32; display: block; margin-bottom: 5px;">Admin Feedback:</strong>
+                <span style="color: #333;">{{ item.admin_feedback }}</span>
+            </div>
+            {% endif %}
+            <div style="border-top: 1px solid #eee; padding-top: 10px; display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-size: 0.9em; color: #888;">📅 {{ item.submitted_at|date:"d M Y" }}</span>
+                
+                {% if item.is_graded %}
+                    <span class="badge" style="background-color: #4CAF50; color: white; padding: 5px 12px; border-radius: 15px; font-weight: bold;">
+                        +{{ item.admin_score }} puncte
+                    </span>
+                {% else %}
+                    <span class="badge" style="background-color: #FFC107; color: black; padding: 5px 12px; border-radius: 15px; font-weight: bold;">
+                        În așteptare ⏳
+                    </span>
+                {% endif %}
+            </div>
+        </div>
+        {% empty %}
+            <p style="text-align: center; color: #888;">Încă nu ai răspuns la nicio întrebare.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

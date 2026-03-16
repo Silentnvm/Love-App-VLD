@@ -1,0 +1,95 @@
+{% extends 'game/base.html' %}
+
+{% block title %}Daily Message - Love App{% endblock %}
+
+{% block content %}
+<div class="daily-message-container">
+    <h1 class="page-title">💌 Your Daily Message</h1>
+    
+    {% if message %}
+    <div class="message-card">
+        <div class="message-category">{{ message.get_category_display }}</div>
+        <div class="message-content">
+            {{ message.message }}
+        </div>
+        
+        {% if daily_log and not daily_log.was_claimed %}
+        <form method="post" action="{% url 'claim_daily_reward' %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-primary">Claim Daily Reward (+5 points)</button>
+        </form>
+        {% elif daily_log.was_claimed %}
+        <div class="claimed-badge">✓ Claimed Today</div>
+        {% endif %}
+    </div>
+    {% else %}
+    <div class="no-message">
+        <p>No messages available. Come back tomorrow! 💕</p>
+    </div>
+    {% endif %}
+    
+    <div class="back-link">
+        <a href="{% url 'player_dashboard' %}" class="btn btn-small">← Back to Dashboard</a>
+    </div>
+</div>
+
+<style>
+.daily-message-container {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.page-title {
+    text-align: center;
+    color: var(--primary-color);
+    margin-bottom: 2rem;
+}
+
+.message-card {
+    background: var(--card-bg);
+    padding: 3rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    text-align: center;
+}
+
+.message-category {
+    display: inline-block;
+    background: var(--accent-color);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+}
+
+.message-content {
+    font-size: 1.3rem;
+    line-height: 1.8;
+    color: var(--text-dark);
+    margin-bottom: 2rem;
+    font-style: italic;
+}
+
+.claimed-badge {
+    background: var(--success);
+    color: white;
+    padding: 1rem;
+    border-radius: 8px;
+    font-weight: bold;
+}
+
+.no-message {
+    background: var(--card-bg);
+    padding: 3rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    text-align: center;
+}
+
+.back-link {
+    text-align: center;
+    margin-top: 2rem;
+}
+</style>
+{% endblock %}

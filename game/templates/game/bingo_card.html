@@ -1,0 +1,57 @@
+{% extends 'game/base.html' %}
+
+{% block title %}{{ card.title }} - Love App{% endblock %}
+
+{% block content %}
+<div class="bingo-detail-container">
+    <h1>{{ card.title }}</h1>
+    <p>{{ card.description }}</p>
+    
+    <div class="bingo-grid" style="grid-template-columns: repeat({{ card.size|divisibleby:3|yesno:'3,4' }}, 1fr);">
+        {% for square in squares %}
+        <div class="bingo-square {% if square.position in progress.completed_squares %}completed{% endif %}" 
+             onclick="toggleSquare({{ card.id }}, {{ square.position }})">
+            <div class="square-number">{{ square.position }}</div>
+            <div class="square-task">{{ square.task }}</div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<style>
+.bingo-grid {
+    display: grid;
+    gap: 1rem;
+    margin: 2rem 0;
+}
+
+.bingo-square {
+    background: var(--card-bg);
+    padding: 1.5rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.bingo-square.completed {
+    background: var(--success);
+    color: white;
+}
+
+.bingo-square:hover {
+    transform: scale(1.05);
+}
+</style>
+
+<script>
+function toggleSquare(cardId, position) {
+    fetch(`/bingo/${cardId}/toggle/${position}/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': getCookie('csrftoken'),
+        }
+    }).then(() => location.reload());
+}
+</script>
+{% endblock %}

@@ -1,0 +1,161 @@
+{% extends 'game/base.html' %}
+
+{% block title %}Profile - Love App{% endblock %}
+
+{% block content %}
+<div class="profile-container">
+    <div class="profile-header">
+        <div class="profile-avatar">{{ user.username|slice:":1"|upper }}</div>
+        <h1>{{ user.first_name|default:user.username }}</h1>
+        <p>{{ user.email }}</p>
+    </div>
+    
+    <div class="stats-section">
+        <div class="stat-card">
+            <div class="stat-icon">🎯</div>
+            <div class="stat-value">{{ profile.current_level }}</div>
+            <div class="stat-label">Current Level</div>
+        </div>
+        
+        <div class="stat-card">
+            <div class="stat-icon">⭐</div>
+            <div class="stat-value">{{ profile.total_score }}</div>
+            <div class="stat-label">Total Score</div>
+        </div>
+        
+        <div class="stat-card">
+            <div class="stat-icon">🔥</div>
+            <div class="stat-value">{{ profile.streak_days }}</div>
+            <div class="stat-label">Day Streak</div>
+        </div>
+        
+        <div class="stat-card">
+            <div class="stat-icon">✅</div>
+            <div class="stat-value">{{ total_completed }}</div>
+            <div class="stat-label">Completed</div>
+        </div>
+        
+        <div class="stat-card">
+            <div class="stat-icon">🎁</div>
+            <div class="stat-value">{{ total_rewards }}</div>
+            <div class="stat-label">Rewards</div>
+        </div>
+    </div>
+    
+    <div class="account-info">
+        <h2>Account Information</h2>
+        <div class="info-item">
+            <span class="info-label">Username:</span>
+            <span class="info-value">{{ user.username }}</span>
+        </div>
+        <div class="info-item">
+            <span class="info-label">Member Since:</span>
+            <span class="info-value">{{ profile.created_at|date:"F d, Y" }}</span>
+        </div>
+        <div class="info-item">
+            <span class="info-label">Last Login:</span>
+            <span class="info-value">{{ profile.last_login_date|date:"F d, Y" }}</span>
+        </div>
+    </div>
+</div>
+
+<style>
+.profile-container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.profile-header {
+    background: var(--card-bg);
+    padding: 3rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.profile-avatar {
+    width: 100px;
+    height: 100px;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    font-size: 3rem;
+    font-weight: bold;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+}
+
+.profile-header h1 {
+    color: var(--text-dark);
+    margin-bottom: 0.5rem;
+}
+
+.stats-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.stat-card {
+    background: var(--card-bg);
+    padding: 1.5rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    text-align: center;
+}
+
+.stat-icon {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.stat-value {
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--primary-color);
+    margin-bottom: 0.5rem;
+}
+
+.stat-label {
+    color: var(--text-light);
+    font-size: 0.9rem;
+}
+
+.account-info {
+    background: var(--card-bg);
+    padding: 2rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+}
+
+.account-info h2 {
+    margin-bottom: 1.5rem;
+    color: var(--text-dark);
+}
+
+.info-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.info-item:last-child {
+    border-bottom: none;
+}
+
+.info-label {
+    color: var(--text-light);
+    font-weight: 500;
+}
+
+.info-value {
+    color: var(--text-dark);
+    font-weight: bold;
+}
+</style>
+{% endblock %}

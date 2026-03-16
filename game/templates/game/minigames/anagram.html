@@ -1,0 +1,29 @@
+{% extends 'game/base.html' %}
+
+{% block title %}{{ minigame.title }} - Anagram{% endblock %}
+
+{% block content %}
+<div class="minigame-container">
+    <h1 class="page-title">Anagram</h1>
+    <p class="minigame-description">{{ minigame.description }}</p>
+
+    {% if questions %}
+    {% with q=questions.0 %}
+    {% comment %}Show scrambled letters of the correct answer if available{% endcomment %}
+    {% with answer=q.correct_answer|default:'' %}
+    <div class="anagram-hint">Rearrange letters to form the answer.</div>
+    {% endwith %}
+    <form method="post" action="{% url 'submit_minigame' minigame.id %}">
+        {% csrf_token %}
+        <div class="question-card">
+            <div class="question-text">{{ q.question_text }}</div>
+            <input type="text" class="text-input" name="question_{{ q.id }}" placeholder="Your answer" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+    {% endwith %}
+    {% else %}
+    <div class="no-questions">No anagram configured yet.</div>
+    {% endif %}
+</div>
+{% endblock %}

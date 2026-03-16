@@ -1,0 +1,183 @@
+{% extends 'game/base.html' %}
+
+{% block title %}{{ minigame.title }} - Love App{% endblock %}
+
+{% block content %}
+<div class="minigame-container">
+    <h1 class="page-title">{{ minigame.title }}</h1>
+    <p class="minigame-description">{{ minigame.description }}</p>
+    
+    <div class="challenge-container">
+        <div class="challenge-instructions">
+            <h2>📋 Your Challenge</h2>
+            {% for question in questions %}
+            <div class="task-item">
+                <div class="task-number">{{ forloop.counter }}</div>
+                <div class="task-text">{{ question.question_text }}</div>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <div class="submission-form">
+            <h2>📤 Submit Your Proof</h2>
+            <form method="post" action="{% url 'submit_minigame' minigame.id %}" enctype="multipart/form-data">
+                {% csrf_token %}
+                
+                <div class="form-group">
+                    <label for="submission_text">Description (optional)</label>
+                    <textarea id="submission_text" name="submission_text" rows="4" placeholder="Tell me about it..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="submission_image">Upload Photo (optional)</label>
+                    <input type="file" id="submission_image" name="submission_image" accept="image/*">
+                    <div class="file-preview" id="imagePreview"></div>
+                </div>
+                
+                <button type="submit" class="btn btn-primary">Submit for Review</button>
+            </form>
+        </div>
+        
+        {% if progress.attempts > 0 %}
+        <div class="submission-status">
+            <h3>Submission Status</h3>
+            <p>You have submitted {{ progress.attempts }} time(s)</p>
+            {% if progress.approved_by_admin %}
+            <div class="status-approved">✓ Approved by Admin!</div>
+            {% else %}
+            <div class="status-pending">⏳ Waiting for review...</div>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+.challenge-container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.challenge-instructions {
+    background: var(--card-bg);
+    padding: 2rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    margin-bottom: 2rem;
+}
+
+.challenge-instructions h2 {
+    color: var(--primary-color);
+    margin-bottom: 1.5rem;
+}
+
+.task-item {
+    display: flex;
+    gap: 1rem;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+}
+
+.task-number {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    background: var(--primary-color);
+    color: white;
+    border-radius: 50%;
+    font-weight: bold;
+    flex-shrink: 0;
+}
+
+.task-text {
+    flex: 1;
+    font-size: 1.1rem;
+}
+
+.submission-form {
+    background: var(--card-bg);
+    padding: 2rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    margin-bottom: 2rem;
+}
+
+.submission-form h2 {
+    color: var(--primary-color);
+    margin-bottom: 1.5rem;
+}
+
+.form-group textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-family: inherit;
+    resize: vertical;
+}
+
+.form-group input[type="file"] {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px dashed #e0e0e0;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.file-preview {
+    margin-top: 1rem;
+}
+
+.file-preview img {
+    max-width: 300px;
+    max-height: 300px;
+    border-radius: 8px;
+}
+
+.submission-status {
+    background: var(--card-bg);
+    padding: 1.5rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    text-align: center;
+}
+
+.status-approved {
+    background: var(--success);
+    color: white;
+    padding: 1rem;
+    border-radius: 8px;
+    font-weight: bold;
+    margin-top: 1rem;
+}
+
+.status-pending {
+    background: var(--warning);
+    color: white;
+    padding: 1rem;
+    border-radius: 8px;
+    font-weight: bold;
+    margin-top: 1rem;
+}
+</style>
+
+<script>
+document.getElementById('submission_image').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    const preview = document.getElementById('imagePreview');
+    
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            preview.innerHTML = `<img src="${e.target.result}" alt="Preview">`;
+        };
+        reader.readAsDataURL(file);
+    }
+});
+</script>
+{% endblock %}
